@@ -46,10 +46,14 @@ class Matrix:
         else:
             return Matrix(result)
 
-    def __getitem__(self, key: int) -> list[int | float]:
-        if not (type(key) == int):
+    def __getitem__(self, index: int) -> list[int | float]:
+        if not isinstance(index, int):
             raise TypeError("Indexes can only be integer values")
-        return self.data[key]
+
+        return self.data[index]
+    
+    def __len__(self) -> int:
+        return self.shape[0]
 
     def __add__(self, other: Matrix) -> Matrix:
         if not isinstance(other, Matrix):
@@ -87,7 +91,7 @@ class Matrix:
 
     def __mul__(self, other: Vector | Matrix) -> Vector | Matrix: 
         if isinstance(other, (Matrix, Vector)):
-            if self.shape[1] != (other.shape[0] if isinstance(other, Matrix) else other.dim):
+            if self.shape[1] != (other.shape[0] if isinstance(other, Matrix) else other.dims):
                 raise ValueError("Incompatible dimensions")
 
             return self._apply_transformation(other)
@@ -107,6 +111,31 @@ class Matrix:
             result.append(new_row)
 
         return Matrix(result)
+    
+    def __pow__(self, exponent: int) -> Matrix:
+        if not isinstance(exponent, int):
+            return NotImplemented
+
+        if exponent < 0:
+            raise ValueError(f"Exponent cannot be negative. Exponent: {exponent}")
+        
+        if not self.is_square:
+            raise ValueError("Matrix exponentiation requires a square matrix")
+
+        if exponent == 0:
+            return self.left_identity
+
+        if exponent == 1:
+            return self.copy()
+
+        result = self.copy()
+        for _ in range(exponent - 1):
+            result = result * self
+
+        return result
+
+    def __neg__(self) -> Matrix:
+        return -1 * self
 
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, Matrix):
@@ -127,6 +156,60 @@ class Matrix:
          rows = ",\n ".join(str(row) for row in self.data)
          return f"[{rows}]"
     
+    @property
+    def T(self) -> Matrix:
+        return self.transpose()
+
+    @property
+    def rows(self) -> int: 
+        return self.shape[0]
+
+    @property
+    def cols(self) -> int:
+        return self.shape[1]
+
+    @property
+    def is_square(self) -> bool:
+        return self.rows == self.cols
+
+    @property
+    def left_identity(self) -> Matrix:
+        n = self.rows
+        return Matrix([[1 if i == j else 0 for j in range(n)] for i in range(n)])
+
+    @property  
+    def right_identity(self) -> Matrix:
+        n = self.cols
+        return Matrix([[1 if i == j else 0 for j in range(n)] for i in range(n)])
+
+    def get_row(self, index: int) -> list[int | float]:
+        if not isinstance(index, int):
+            raise TypeError("Indexes can only be integer values")
+
+        return self.data[index].copy()
+
+    def get_col(self, index: int) -> list[int | float]:
+        if not isinstance(index, int):
+            raise TypeError("Indexes can only be integer values")
+
+        return [self.data[i][index] for i in range(self.rows)]
+
+    def get_rows(self) -> list[list[int | float]]:
+        return [row.copy() for row in self.data]
+
+    def get_cols(self, to_vector: bool=False) -> list[list[int | float]] | list[Vector]:
+        if not isinstance(to_vector, bool):
+            raise TypeError("To-vector must be a boolean")
+
+        result = [[self.data[i][j] for i in range(self.rows)] for j in range(self.cols)]
+        if to_vector:
+            return [Vector(col) for col in result]
+        
+        return result
+
+    def apply(self, vec: Vector) -> Vector:
+        return self * vec
+
     def transpose(self) -> Matrix:
         result = []
         row_num, col_num = self.shape
@@ -138,9 +221,5 @@ class Matrix:
 
         return Matrix(result)
 
-    @property
-    def T(self) -> Matrix:
-        return self.transpose()
-
-    def apply(self, vec: Vector) -> Vector:
-        return self * vec
+    def copy(self) -> Matrix:
+        return Matrix(self.get_rows())
