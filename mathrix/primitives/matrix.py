@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Iterator
 
 from mathrix.primitives.vector import Vector
@@ -47,7 +48,9 @@ class Matrix:
             )
 
         if not all(isinstance(row, list) for row in data):
-            bad_types = [type(row).__name__ for row in data if not isinstance(row, list)]
+            bad_types = [
+                type(row).__name__ for row in data if not isinstance(row, list)
+            ]
             raise TypeError(
                 f"All rows must be lists. Found invalid row type(s): {', '.join(set(bad_types))}"
             )
@@ -856,7 +859,9 @@ class Matrix:
         """
         return [row.copy() for row in self]
 
-    def get_cols(self, to_vector: bool = False) -> list[list[int | float]] | list[Vector]:
+    def get_cols(
+        self, to_vector: bool = False
+    ) -> list[list[int | float]] | list[Vector]:
         """
         Get all columns as a list.
 
