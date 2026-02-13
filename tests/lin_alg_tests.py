@@ -1,6 +1,6 @@
 import pytest
-from vector import Vector
-from matrix import Matrix  # Import your corrected Vector and Matrix classes
+from mathrix.primitives.vector import Vector
+from mathrix.primitives.matrix import Matrix  # Import your corrected Vector and Matrix classes
 
 
 # ==================== VECTOR TESTS ====================
