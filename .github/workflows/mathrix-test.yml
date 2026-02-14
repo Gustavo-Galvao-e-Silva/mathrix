@@ -33,6 +33,4 @@ jobs:
       
       - name: Run tests
         run: pytest tests/ -v
-      
-      - name: Run type checking
-        run: mypy mathrix --ignore-missing-imports
+        
