@@ -1,7 +1,8 @@
 import random
 from math import pi, cos, sin
 
-from mathrix import Vector, Matrix
+from mathrix.primitives.vector import Vector
+from mathrix.primitives.matrix import Matrix
 
 
 def identity(n: int) -> Matrix:

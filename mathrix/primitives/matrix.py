@@ -1,7 +1,7 @@
 from __future__ import annotations
 from typing import Iterator, overload
 
-from mathrix import Vector
+from mathrix.primitives.vector import Vector
 
 
 class Matrix:
