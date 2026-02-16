@@ -217,7 +217,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ## Documentation
 
-Full documentation is available at [mathrix.readthedocs.io](https://mathrix.readthedocs.io) *(coming soon)*
+Full documentation will be available at [mathrix.readthedocs.io](https://mathrix.readthedocs.io) *(coming soon)*
 
 - **API Reference** – Complete function and class documentation
 - **Tutorials** – Step-by-step guides for common operations
