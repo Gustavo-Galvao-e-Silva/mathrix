@@ -185,6 +185,62 @@ class Matrix:
 
         return self.data[index]
 
+    def __setitem__(self, index: int, new_row: list[int | float]) -> None:
+        """
+        Replace a row of the matrix at a given index.
+
+        Allows direct row assignment using index notation. The replacement
+        row must be a list of numbers with the same length as the existing
+        rows in this matrix.
+
+        Parameters
+        ----------
+        index : int
+            The row index (0-based). Negative indices are supported.
+        new_row : list[int | float]
+            The new row to assign. Must contain only numbers and have the
+            same length as the other rows in this matrix.
+
+        Raises
+        ------
+        TypeError
+            If index is not an integer, new_row is not a list, or new_row
+            contains non-numeric elements.
+        ValueError
+            If new_row has a different length than the existing rows.
+
+        Examples
+        --------
+        >>> m = Matrix([[1, 2], [3, 4]])
+        >>> m[0] = [5, 6]
+        >>> print(m)
+        [[5, 6],
+         [3, 4]]
+        """
+        if not isinstance(index, int):
+            raise TypeError(
+                f"Matrix row indices must be integers. Got {type(index).__name__}."
+            )
+
+        if not isinstance(new_row, list):
+            raise TypeError(f"Row must be a list. Got {type(new_row).__name__}.")
+
+        for j, elem in enumerate(new_row):
+            if not isinstance(elem, (int, float)):
+                raise TypeError(
+                    f"All row elements must be numbers (int or float). "
+                    f"Found {type(elem).__name__} at position [{j}]."
+                )
+
+        if len(new_row) != self.cols:
+            raise ValueError(
+                f"Cannot assign row of length {len(new_row)} to a matrix with "
+                f"{self.cols} columns. The replacement row must have exactly "
+                f"{self.cols} elements."
+            )
+
+        self.data[index] = new_row
+
     def __len__(self) -> int:
         """
         Get the number of rows in the matrix.
