@@ -54,7 +54,9 @@ Implementations must match standard mathematical definitions and textbook algori
 Error messages should explain what went wrong and why, helping users learn.
 
 ### 5. Minimal External Dependencies
-The core library (i.e. vector and matrix implementations and operations) exclusevily uses Python's standard library to remain transparent and accessible. Additional features such as visualizations should strive to minimize dependencies, especially those that rely on packages that are not solely setup with pip (e.g. Manim, which relies on C libraries, though this case is provided as an optional package for prettier visualizations, and greatly improves learning).
+The core library (i.e. vector and matrix implementations and operations) exclusevily uses Python's standard library to remain transparent and accessible. 
+
+Additional features such as visualizations should strive to minimize dependencies, especially those that rely on packages that are not solely setup with pip (e.g. Manim, which relies on C libraries, though this case is provided as an optional package for prettier visualizations, and greatly improves learning).
 
 ### 6. Break Any of These Principles for Education
 Although these are guides, if they are blocking the advancement of this library's purpose: break them. It's that simple!
