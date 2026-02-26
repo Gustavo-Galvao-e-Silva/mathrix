@@ -201,6 +201,23 @@ def _add_below_pivot(
     return result, new_operations
 
 
+def _add_above_pivot(
+    pivot_row: int, pivot_col: int, matrix: Matrix
+) -> tuple[Matrix, list[RowOperation]]:
+    pivot = matrix[pivot_row][pivot_col]
+    result = matrix.copy()
+    new_operations = []
+    for i in range(0, pivot_row, -1):
+        val = result[i][pivot_col]
+        if val == 0:
+            continue
+        op = RowAdd(i, pivot_row, -(val / pivot))
+        result = op.apply(result)
+        new_operations.append(op)
+
+    return result, new_operations
+
+
 def ref(matrix: Matrix) -> Reduction:
     result = matrix.copy()
     operations = []
@@ -221,4 +238,4 @@ def ref(matrix: Matrix) -> Reduction:
 
 
 def rref(matrix: Matrix) -> Reduction:
-    pass
+    gaussian_step = ref(matrix)
