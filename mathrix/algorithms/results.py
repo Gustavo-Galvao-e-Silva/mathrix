@@ -219,9 +219,15 @@ class LUDecomposition:
         >>> print(lu(Matrix([[2, 1], [4, 3]])))
         LU decomposition of 2×2 matrix — 1 steps
 
+        P @ A = L @ U
+
         P:
         [[1, 0],
          [0, 1]]
+
+        A:
+        [[2, 1],
+         [4, 3]]
 
         L:
         [[1, 0],
@@ -238,7 +244,11 @@ class LUDecomposition:
         )
 
         body: str = (
-            f"\nP:\n{self.permutation}\n" f"\nL:\n{self.lower}\n" f"\nU:\n{self.upper}"
+            f"\nP @ A = L @ U\n"
+            f"\nP:\n{self.permutation}\n"
+            f"\nA:\n{self.original}\n"
+            f"\nL:\n{self.lower}\n"
+            f"\nU:\n{self.upper}"
         )
 
         return header + body
