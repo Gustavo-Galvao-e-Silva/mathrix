@@ -1,6 +1,6 @@
 # panchi
 
-**panchi** is a Python-native linear algebra library designed for learning, experimentation, and visual intuition.
+**panchi** is a Python-native* linear algebra library designed for learning, experimentation, and visual intuition.
 
 The goal is not performance. The goal is **clarity**.
 
@@ -10,22 +10,23 @@ The goal is not performance. The goal is **clarity**.
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
+* We use Maninm (which requires C-libraries) for improved visualizations, but it is not core to the library.
 ---
 
 ## Why panchi?
 
 Most linear algebra libraries optimize for speed and abstraction. panchi optimizes for **understanding**.
 
-panchi is built for students who want to see the math happen, educators who need transparent implementations, and anyone who has ever wondered what a matrix is *actually doing*.
+panchi is built for students who want to see the math happen, educators who need transparent implementations, and anyone who has ever wondered what linear algeabra is *actually about*.
 
-Think of it as a **laboratory notebook**, not a production engine.
+Think of it as a **lab**, not a production engine.
 
 ---
 
 ## Philosophy
 
 1. **Explicit over implicit** – Algorithms are implemented directly, not delegated to opaque backends
-2. **Readable over clever** – Code prioritizes clarity and educational value over terse optimizations
+2. **Readable over clever** – Code prioritizes clarity and educational value over terse optimizations or extreme pythonism
 3. **Mathematical over computational** – Objects behave like mathematical entities with proper operator overloading
 4. **Visual by default** – Visualization is a first-class feature, not an afterthought
 5. **Informative errors** – Error messages guide learning by explaining what went wrong and why
