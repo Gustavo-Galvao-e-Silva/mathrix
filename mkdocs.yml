@@ -1,0 +1,64 @@
+site_name: panchi
+site_description: A Python-native linear algebra library for learning, experimentation, and visual intuition.
+site_url: https://panchi.readthedocs.io
+repo_url: https://github.com/Gustavo-Galvao-e-Silva/panchi
+repo_name: panchi
+
+theme:
+  name: material
+  palette:
+    - scheme: default
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - scheme: slate
+      primary: indigo
+      accent: indigo
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.sections
+    - navigation.top
+    - content.code.copy
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            docstring_style: numpy
+            show_source: true
+            show_root_heading: true
+
+markdown_extensions:
+  - admonition
+  - pymdownx.highlight
+  - pymdownx.superfences
+  - pymdownx.arithmatex:
+      generic: true
+
+extra_javascript:
+  - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
+
+nav:
+  - Home: index.md
+  - Getting Started:
+    - Installation: getting-started/installation.md
+    - Quickstart: getting-started/quickstart.md
+  - User Guide:
+    - Vectors: user-guide/vectors.md
+    - Matrices: user-guide/matrices.md
+    - Linear Transformations: user-guide/transformations.md
+    - Row Operations: user-guide/row-operations.md
+    - Row Reduction: user-guide/row-reduction.md
+    - Decompositions: user-guide/decompositions.md
+    - Solving Systems: user-guide/solving-systems.md
+  - API Reference:
+    - panchi: api/panchi.md
+    - panchi.algorithms: api/algorithms.md
+    - panchi.visualizations: api/visualizations.md
+  - Contributing: contributing.md
