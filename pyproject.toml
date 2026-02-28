@@ -34,6 +34,7 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Topic :: Education",
   "Topic :: Scientific/Engineering :: Mathematics",
   "Typing :: Typed",
@@ -50,6 +51,7 @@ Changelog = "https://github.com/Gustavo-Galvao-e-Silva/panchi/releases"
 
 [project.optional-dependencies]
 manim = ["manim>=0.18.0"]
+docs = ["mkdocs-material>=9.0", "mkdocstrings[python]>=0.24"]
 
 dev = [
   "pytest>=7.0",
@@ -67,6 +69,7 @@ all = ["panchi[manim,dev]"]
 packages = [
   "panchi",
   "panchi.primitives",
+  "panchi.algorithms",
   "panchi.visualizations",
   "panchi.visualizations.backends",
 ]
