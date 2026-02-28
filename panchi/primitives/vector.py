@@ -25,7 +25,7 @@ class Vector:
     Raises
     ------
     TypeError
-        If data is not a list or contains non-numeric elements.
+        If data is not a list, or contains non-numeric elements.
 
     Examples
     --------
@@ -37,10 +37,15 @@ class Vector:
     """
 
     def __init__(self, data: list[int | float]) -> None:
-        if not (
-            isinstance(data, list) and all(isinstance(x, (int, float)) for x in data)
-        ):
-            raise TypeError("Vectors can only be created with lists of numbers")
+        if not isinstance(data, list):
+            raise TypeError(f"Vector data must be a list. Got {type(data).__name__}.")
+
+        for i, x in enumerate(data):
+            if not isinstance(x, (int, float)):
+                raise TypeError(
+                    f"All vector components must be numbers (int or float). "
+                    f"Got {type(x).__name__} at index {i}."
+                )
 
         self.data = data
         self.shape = (len(data), 1)
@@ -73,7 +78,9 @@ class Vector:
         30
         """
         if not isinstance(key, int):
-            raise TypeError("Indexes can only be integer values")
+            raise TypeError(
+                f"Vector index must be an integer. Got {type(key).__name__}."
+            )
 
         return self.data[key]
 
@@ -101,10 +108,15 @@ class Vector:
         [1, 5, 3]
         """
         if not isinstance(key, int):
-            raise TypeError("Indexes can only be integer values")
+            raise TypeError(
+                f"Vector index must be an integer. Got {type(key).__name__}."
+            )
 
         if not isinstance(new_value, (int, float)):
-            raise TypeError("Vectors can only hold numbers")
+            raise TypeError(
+                f"Vector components must be numbers (int or float). "
+                f"Got {type(new_value).__name__}."
+            )
 
         self.data[key] = new_value
 
@@ -164,7 +176,9 @@ class Vector:
         Raises
         ------
         TypeError
-            If other is not a Vector or dimensions don't match.
+            If other is not a Vector.
+        ValueError
+            If the vectors have different dimensions.
 
         Examples
         --------
@@ -175,14 +189,20 @@ class Vector:
         [5, 7, 9]
         """
         if not isinstance(other, Vector):
-            raise TypeError("Cannot add up non-matrix objects to matrix")
+            raise TypeError(
+                f"Cannot add Vector and {type(other).__name__}. "
+                f"Both operands must be vectors."
+            )
 
         if self.dims != other.dims:
-            raise TypeError("Cannot add up vectors with different dimensions")
+            raise ValueError(
+                f"Cannot add vectors with different dimensions. "
+                f"Left vector has {self.dims} dimensions, "
+                f"right vector has {other.dims} dimensions."
+            )
 
         result = []
-        row_num = self.dims
-        for i in range(row_num):
+        for i in range(self.dims):
             result.append(self[i] + other[i])
 
         return Vector(result)
@@ -206,7 +226,9 @@ class Vector:
         Raises
         ------
         TypeError
-            If other is not a Vector or dimensions don't match.
+            If other is not a Vector.
+        ValueError
+            If the vectors have different dimensions.
 
         Examples
         --------
@@ -217,14 +239,20 @@ class Vector:
         [4, 5, 6]
         """
         if not isinstance(other, Vector):
-            raise TypeError("Cannot add up non-matrix objects to matrix")
+            raise TypeError(
+                f"Cannot subtract {type(other).__name__} from Vector. "
+                f"Both operands must be vectors."
+            )
 
         if self.dims != other.dims:
-            raise TypeError(f"Cannot add up vectors with different dimensions")
+            raise ValueError(
+                f"Cannot subtract vectors with different dimensions. "
+                f"Left vector has {self.dims} dimensions, "
+                f"right vector has {other.dims} dimensions."
+            )
 
         result = []
-        row_num = self.dims
-        for i in range(row_num):
+        for i in range(self.dims):
             result.append(self[i] - other[i])
 
         return Vector(result)
@@ -261,47 +289,8 @@ class Vector:
             return NotImplemented
 
         result = []
-        row_num = self.dims
-        for i in range(row_num):
+        for i in range(self.dims):
             result.append(self[i] * other)
-
-        return Vector(result)
-
-    def __truediv__(self, other: int | float) -> Vector:
-        """
-        Divide vector by a scalar.
-
-        Divides each component of the vector by the scalar value.
-
-        Parameters
-        ----------
-        other : int | float
-            The scalar to divide by.
-
-        Returns
-        -------
-        Vector
-            The result of scalar division.
-
-        Raises
-        ------
-        TypeError
-            If other is not a number.
-
-        Examples
-        --------
-        >>> v = Vector([6, 9, 12])
-        >>> result = v / 3
-        >>> print(result)
-        [2.0, 3.0, 4.0]
-        """
-        if not isinstance(other, (int, float)):
-            return NotImplemented
-
-        result = []
-        row_num = self.dims
-        for i in range(row_num):
-            result.append(self[i] / other)
 
         return Vector(result)
 
@@ -323,6 +312,35 @@ class Vector:
         """
         return -1 * self
 
+    def __eq__(self, other: object) -> bool:
+        """
+        Check if two vectors are equal.
+
+        Vectors are equal if they have the same dimension and all
+        corresponding components are equal.
+
+        Parameters
+        ----------
+        other : object
+            The object to compare with.
+
+        Returns
+        -------
+        bool
+            True if vectors are equal, False otherwise.
+
+        Examples
+        --------
+        >>> v1 = Vector([1, 2, 3])
+        >>> v2 = Vector([1, 2, 3])
+        >>> v1 == v2
+        True
+        """
+        if not isinstance(other, Vector):
+            return NotImplemented
+
+        return self.data == other.data
+
     def __str__(self) -> str:
         """
         Return a string representation of the vector.
@@ -339,6 +357,23 @@ class Vector:
         [1, 2, 3]
         """
         return f"{self.data}"
+
+    def __repr__(self) -> str:
+        """
+        Return a constructor-style string for data inspection.
+
+        Returns
+        -------
+        str
+            A string that could be used to recreate this vector.
+
+        Examples
+        --------
+        >>> v = Vector([1, 2, 3])
+        >>> repr(v)
+        'Vector([1, 2, 3])'
+        """
+        return f"Vector({self.data})"
 
     @property
     def dims(self) -> int:
@@ -408,7 +443,12 @@ class Vector:
         >>> normalized.magnitude
         1.0
         """
-        return self / self.magnitude
+        if self.magnitude == 0:
+            raise ZeroDivisionError(
+                "Cannot normalize a zero vector. " "The zero vector has no direction."
+            )
+
+        return (1 / self.magnitude) * self
 
     def copy(self) -> Vector:
         """

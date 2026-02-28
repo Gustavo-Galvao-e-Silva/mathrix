@@ -224,6 +224,9 @@ def ref(matrix: Matrix) -> Reduction:
     >>> reduction.pivots
     [(0, 0), (1, 1), (2, 2)]
     """
+    if not isinstance(matrix, Matrix):
+        raise TypeError(f"Expected a Matrix. Got {type(matrix).__name__}.")
+
     result = matrix.copy()
     operations = []
     pivots = []
@@ -276,6 +279,9 @@ def rref(matrix: Matrix) -> Reduction:
     >>> reduction.nullity
     0
     """
+    if not isinstance(matrix, Matrix):
+        raise TypeError(f"Expected a Matrix. Got {type(matrix).__name__}.")
+
     gaussian_step = ref(matrix)
     result = gaussian_step.result
     operations = gaussian_step.steps

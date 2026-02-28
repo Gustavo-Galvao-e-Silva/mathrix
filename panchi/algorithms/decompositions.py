@@ -115,4 +115,3 @@ def lu(matrix: Matrix) -> LUDecomposition:
     l = _calculate_l(n, steps)
     u = matrix_ref.result
     p = _calculate_p(n, steps)
-    return LUDecomposition(matrix, l, u, p, steps)

@@ -41,6 +41,7 @@ def identity(n: int) -> Matrix:
     """
     if not isinstance(n, int):
         raise TypeError(f"Size must be an integer. Got {type(n).__name__}.")
+
     if n <= 0:
         raise ValueError(f"Size must be positive. Got {n}.")
 
@@ -81,6 +82,7 @@ def zero_matrix(rows: int, cols: int) -> Matrix:
         raise TypeError(
             f"Rows and columns must be integers. Got rows: {type(rows).__name__}, cols: {type(cols).__name__}."
         )
+
     if rows <= 0 or cols <= 0:
         raise ValueError(
             f"Rows and columns must be positive. Got rows: {rows}, cols: {cols}."
@@ -123,6 +125,7 @@ def one_matrix(rows: int, cols: int) -> Matrix:
         raise TypeError(
             f"Rows and columns must be integers. Got rows: {type(rows).__name__}, cols: {type(cols).__name__}."
         )
+
     if rows <= 0 or cols <= 0:
         raise ValueError(
             f"Rows and columns must be positive. Got rows: {rows}, cols: {cols}."
@@ -140,7 +143,7 @@ def zero_vector(dims: int) -> Vector:
 
     Parameters
     ----------
-    dims: int
+    dims : int
         Number of components in the vector.
 
     Returns
@@ -163,6 +166,7 @@ def zero_vector(dims: int) -> Vector:
     """
     if not isinstance(dims, int):
         raise TypeError(f"Dimension must be an integer. Got {type(dims).__name__}.")
+
     if dims <= 0:
         raise ValueError(f"Dimension must be positive. Got {dims}.")
 
@@ -175,7 +179,7 @@ def one_vector(dims: int) -> Vector:
 
     Parameters
     ----------
-    dims: int
+    dims : int
         Number of components in the vector.
 
     Returns
@@ -198,6 +202,7 @@ def one_vector(dims: int) -> Vector:
     """
     if not isinstance(dims, int):
         raise TypeError(f"Dimension must be an integer. Got {type(dims).__name__}.")
+
     if dims <= 0:
         raise ValueError(f"Dimension must be positive. Got {dims}.")
 
@@ -213,7 +218,7 @@ def unit_vector(dims: int, index: int) -> Vector:
 
     Parameters
     ----------
-    dims: int
+    dims : int
         Number of components in the vector.
     index : int
         Position of the 1 component (0-indexed).
@@ -236,12 +241,15 @@ def unit_vector(dims: int, index: int) -> Vector:
     >>> print(e2)
     [0, 1, 0]
     """
-    if not isinstance(dims, int) or not isinstance(index, int):
-        raise TypeError(
-            f"Dimension and index must be integers. Got dimension: {type(dims).__name__}, index: {type(index).__name__}."
-        )
+    if not isinstance(dims, int):
+        raise TypeError(f"Dimensions must be an integer. Got {type(dims).__name__}.")
+
+    if not isinstance(index, int):
+        raise TypeError(f"Index must be an integer. Got {type(index).__name__}.")
+
     if dims <= 0:
         raise ValueError(f"Dimension must be positive. Got {dims}.")
+
     if index < 0 or index >= dims:
         raise ValueError(f"Index must be between 0 and {dims - 1}. Got {index}.")
 
@@ -250,7 +258,7 @@ def unit_vector(dims: int, index: int) -> Vector:
 
 def diagonal(values: list[int | float] | Vector) -> Matrix:
     """
-    Create a diagonal matrix from a list of values.
+    Create a diagonal matrix from a list or Vector of values.
 
     A diagonal matrix has the specified values on its main diagonal
     and zeros everywhere else.
@@ -258,12 +266,17 @@ def diagonal(values: list[int | float] | Vector) -> Matrix:
     Parameters
     ----------
     values : list[int | float] | Vector
-        The diagonal values.
+        The diagonal values. Must be a list of numbers or a Vector.
 
     Returns
     -------
     Matrix
         A square matrix with values on the diagonal.
+
+    Raises
+    ------
+    TypeError
+        If values is not a list or Vector, or if a list element is not a number.
 
     Examples
     --------
@@ -273,6 +286,18 @@ def diagonal(values: list[int | float] | Vector) -> Matrix:
      [0, 2, 0],
      [0, 0, 3]]
     """
+    if not isinstance(values, (list, Vector)):
+        raise TypeError(
+            f"Values must be a list or Vector. Got {type(values).__name__}."
+        )
+
+    if isinstance(values, list):
+        for i, v in enumerate(values):
+            if not isinstance(v, (int, float)):
+                raise TypeError(
+                    f"All diagonal values must be numbers (int or float). Got {type(v).__name__} at index {i}."
+                )
+
     n = len(values)
     return Matrix([[values[i] if i == j else 0 for j in range(n)] for i in range(n)])
 
@@ -299,8 +324,10 @@ def random_vector(dims: int, low: int | float = 0.0, high: int | float = 1.0) ->
 
     Raises
     ------
+    TypeError
+        If dims is not an integer, or low/high are not numbers.
     ValueError
-        If low is not smaller than high.
+        If dims is not positive, or low is not smaller than high.
 
     Examples
     --------
@@ -308,9 +335,21 @@ def random_vector(dims: int, low: int | float = 0.0, high: int | float = 1.0) ->
     >>> v.dims
     3
     """
+    if not isinstance(dims, int):
+        raise TypeError(f"Dimension must be an integer. Got {type(dims).__name__}.")
+
+    if dims <= 0:
+        raise ValueError(f"Dimension must be positive. Got {dims}.")
+
+    if not isinstance(low, (int, float)) or not isinstance(high, (int, float)):
+        raise TypeError(
+            f"low and high must be numbers. "
+            f"Got low: {type(low).__name__}, high: {type(high).__name__}."
+        )
+
     if low >= high:
         raise ValueError(
-            f"Low must be smaller than high. Got low: {low}, high: {high}."
+            f"low must be smaller than high. Got low: {low}, high: {high}."
         )
 
     return Vector([random.uniform(low, high) for _ in range(dims)])
@@ -342,8 +381,10 @@ def random_matrix(
 
     Raises
     ------
+    TypeError
+        If rows or cols are not integers, or low/high are not numbers.
     ValueError
-        If low is not smaller than high.
+        If rows or cols are not positive, or low is not smaller than high.
 
     Examples
     --------
@@ -351,6 +392,21 @@ def random_matrix(
     >>> m.shape
     (2, 3)
     """
+    if not isinstance(rows, int) or not isinstance(cols, int):
+        raise TypeError(
+            f"Rows and columns must be integers. Got rows: {type(rows).__name__}, cols: {type(cols).__name__}."
+        )
+
+    if not isinstance(low, (int, float)) or not isinstance(high, (int, float)):
+        raise TypeError(
+            f"Low and high must be numbers. Got low: {type(low).__name__}, high: {type(high).__name__}."
+        )
+
+    if rows <= 0 or cols <= 0:
+        raise ValueError(
+            f"Rows and columns must be positive. Got rows: {rows}, cols: {cols}."
+        )
+
     if low >= high:
         raise ValueError(
             f"Low must be smaller than high. Got low: {low}, high: {high}."
@@ -381,6 +437,11 @@ def rotation_matrix_2d(angle: int | float, radians: bool = True) -> Matrix:
     Matrix
         A 2×2 rotation matrix.
 
+    Raises
+    ------
+    TypeError
+        If angle is not a number, or radians is not a bool.
+
     Examples
     --------
     >>> import math
@@ -390,6 +451,12 @@ def rotation_matrix_2d(angle: int | float, radians: bool = True) -> Matrix:
     >>> print(rotated)
     [0.0, 1.0]
     """
+    if not isinstance(angle, (int, float)):
+        raise TypeError(f"Angle must be a number. Got {type(angle).__name__}.")
+
+    if not isinstance(radians, bool):
+        raise TypeError(f"Radians flag must be a bool. Got {type(radians).__name__}.")
+
     angle_radians = angle if radians else (angle * pi / 180)
     cos_angle = cos(angle_radians)
     sin_angle = sin(angle_radians)
@@ -411,7 +478,8 @@ def rotation_matrix_3d(
     angle : int | float
         The rotation angle.
     axis : Vector
-        The axis of rotation (will be normalized automatically).
+        The axis of rotation. Must be a 3-dimensional Vector.
+        Normalized automatically before use.
     radians : bool, optional
         If True, angle is in radians. If False, angle is in degrees.
         Default is True.
@@ -423,8 +491,10 @@ def rotation_matrix_3d(
 
     Raises
     ------
+    TypeError
+        If angle is not a number, axis is not a Vector, or radians is not a bool.
     ValueError
-        If the axis is the zero vector.
+        If the axis is not 3-dimensional or is the zero vector.
 
     Examples
     --------
@@ -436,8 +506,25 @@ def rotation_matrix_3d(
     >>> print(rotated)
     [0.0, 1.0, 0.0]
     """
+    if not isinstance(angle, (int, float)):
+        raise TypeError(f"Angle must be a number. Got {type(angle).__name__}.")
+
+    if not isinstance(axis, Vector):
+        raise TypeError(f"Axis must be a Vector. Got {type(axis).__name__}.")
+
+    if not isinstance(radians, bool):
+        raise TypeError(f"Radians flag must be a bool. Got {type(radians).__name__}.")
+
+    if axis.dims != 3:
+        raise ValueError(
+            f"Rotation axis must be a 3D vector. Got {axis.dims} dimensions."
+        )
+
     if axis.magnitude == 0:
-        raise ValueError("Rotation axis cannot be the zero vector.")
+        raise ValueError(
+            "Rotation axis cannot be the zero vector. "
+            "The zero vector has no direction to rotate around."
+        )
 
     angle_radians = angle if radians else (angle * pi / 180)
     cos_angle = cos(angle_radians)
